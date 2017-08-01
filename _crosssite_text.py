@@ -23,17 +23,31 @@ Support for:
 DEFAULT_FILENAMEOUT 	= '_output.txt'
 DEFAULT_FILENAMEIN 	= '_input.txt'
 REFS_FILE 				= '_refs.txt'
+QUICK_GUIDE_FILE 	 	= '__QUICKSTART.txt'
 
 INPUT_COMMAND 	= 'input!'
 OUTPUT_COMMAND 	= 'output!'
 
 CUSTOM_FILENAMEOUT = ''
 
-SITE_NAMES = ['FURAFFINITY', 'INKBUNNY', 'WEASYL']
+SITE_NAMES 	= ['FURAFFINITY', 'INKBUNNY', 'WEASYL', 'FURRYNETWORK', 'SOFURRY']
+SITES_MD 		= ['FURRYNETWORK', 'WEASYL']
+SITES_BBC 		= ['FURAFFINITY', 'INKBUNNY', 'SOFURRY']
 #Indeces to keep track of where each site lies. 
 FA_INDEX = SITE_NAMES.index('FURAFFINITY')
 IB_INDEX = SITE_NAMES.index('INKBUNNY')
 W_INDEX = SITE_NAMES.index('WEASYL')
+FN_INDEX = SITE_NAMES.index('FURRYNETWORK')
+SF_INDEX = SITE_NAMES.index('SOFURRY')
+
+#URLS
+URL_FA 	= "http://www.furaffinity.net/" 		#www.furaffinity.net/user/flamecoil/
+URL_IB 	= "https://inkbunny.net/"  				#inkbunny.net/flamecoil
+URL_W  	= "https://www.weasyl.com/~" 			#www.weasyl.com/~flamecoil
+URL_FN 	= "https://furrynetwork.com/" 			#furrynetwork.com/flamecoil/
+URL_SF 	= ".sofurry.com/" 						#flamecoil.sofurry.com
+
+
 #EXPRESSION TYPES
 FA_TEXT_PROFILE = 'fa!'
 FA_ICON_PROFILE = 'faicon!'
@@ -50,20 +64,34 @@ W_ICON_PROFILE = 'wicon!'
 W_BOTH_PROFILE = 'wboth!'
 W_PROFILES = [W_TEXT_PROFILE, W_ICON_PROFILE, W_BOTH_PROFILE]
 
+FN_TEXT_PROFILE = 'fn!'
+FN_ICON_PROFILE = 'fnicon!'
+FN_BOTH_PROFILE = 'fnboth!'
+FN_PROFILES = [FN_TEXT_PROFILE, FN_ICON_PROFILE, FN_BOTH_PROFILE]
+
+SF_TEXT_PROFILE = 'sf!'
+SF_ICON_PROFILE = 'sficon!'
+SF_BOTH_PROFILE = 'sfboth!'
+SF_PROFILES = [SF_TEXT_PROFILE, SF_ICON_PROFILE, SF_BOTH_PROFILE]
+
 GEN_TEXT_PROFILE = 'gen!'
 GEN_ICON_PROFILE = 'genicon!'
 GEN_BOTH_PROFILE = 'genboth!'
 GEN_PROFILES = [GEN_TEXT_PROFILE, GEN_ICON_PROFILE, GEN_BOTH_PROFILE]
 
+
 GEN_LINK 		= 'link!' 			#Don't store any reference, just use the link.
 FA_REF_LINK 	= 'faref!' 		#Use/Store a link to an FA page.
 IB_REF_LINK 	= 'ibref!' 		#Use/Store a link to an IB page
-W_REF_LINK 	= 'wref!' 		#Use/Store a link to a Weasyl page.
+W_REF_LINK 	= 'wref!' 		 	#Use/Store a link to a Weasyl page.
+FN_REF_LINK 	= 'fnref!' 		#Use/Store a link to a FurryNetwork page.
+SF_REF_LINK 	= 'sfref!' 		#Use/Store a link to a SoFurry page.
+
 GEN_REF_LINK 	= 'genref!' 	#Use the reference based on the website
 NAME_REF 		= 'name!'
 REF_CHANGE 	= False
 
-REF_LINKS = [GEN_REF_LINK, FA_REF_LINK, IB_REF_LINK, W_REF_LINK]
+REF_LINKS = [GEN_REF_LINK, FA_REF_LINK, IB_REF_LINK, W_REF_LINK, FN_REF_LINK, SF_REF_LINK]
 REF_LOG = [NAME_REF, FA_REF_LINK, W_REF_LINK, IB_REF_LINK, GEN_REF_LINK]
 
 #TEST VARIABLES
@@ -130,11 +158,11 @@ def ibProfileLink(inText, website='FURAFFINITY'):
 	linkVariant = splitExpr[0]
 	profileName = splitExpr[1]
 	
-	profileLink = 'UNDETERMINED-IBLINK'
+	profileLink = 'UNDETERMINED-IBLINK()'
 	
 	#FA Replacement
 	if website == 'FURAFFINITY':
-		profileLink = "[url=https://inkbunny.net/{}]{}[/url]".format(profileName, profileName)
+		profileLink = "[url={}{}]{}[/url]".format(URL_IB,profileName, profileName)
 		
 	elif website == 'INKBUNNY':
 		if linkVariant == 'ib':
@@ -173,11 +201,11 @@ def wProfileLink(inText, website='FURAFFINITY'):
 	linkVariant = splitExpr[0]
 	profileName = splitExpr[1]
 	
-	profileLink = 'UNDETERMINED-WEASYLLINK'
+	profileLink = 'UNDETERMINED-WEASYLLINK()'
 	
 	#FA Replacement
 	if website == 'FURAFFINITY':
-		profileLink = "[url=https://www.weasyl.com/~{}]{}[/url]".format(profileName, profileName)
+		profileLink = "[url={}{}]{}[/url]".format(URL_W,profileName, profileName)
 		
 	elif website == 'INKBUNNY':
 		profileLink = 'w!{}'.format(profileName)
@@ -191,9 +219,46 @@ def wProfileLink(inText, website='FURAFFINITY'):
 			profileLink = '<!~{}>'.format(profileName)
 		else:
 			print("faProfileLink ----- No valid linkVariant input | ({}).".format(linkVariant))
+	elif website == 'FURRYNETWORK':
+#				regularLink = '[{}]({})'.format(description,link)
+		profileLink = "[{}{}]({})".format(URL_W, profileName, profileName)
 		
 	else:
 		print("ibProfileLink ----- No valid website input.")
+	
+	return profileLink
+
+"""
+fnProfileLink:
+	Take in Text
+	Output the appropriate link that will guide to a FN page:
+		FA - [url=https://www.weasyl.com/~name]name[/url]
+		IB - w!name
+		Weasyl:
+			name - <~name>
+			icon - <!name>
+			both - <!~name>
+"""
+def fnProfileLink(inText, website='FURAFFINITY'):
+	
+	splitExpr = inText.split('!')
+	linkVariant = splitExpr[0]
+	profileName = splitExpr[1]
+	
+	profileLink = 'UNDETERMINED-FURRYNETWORKLINK()'
+	
+	#FA Replacement
+	if website == 'FURAFFINITY':
+		profileLink = "[url={}{}]{}[/url]".format(URL_FN,profileName, profileName)
+		
+	elif website == 'INKBUNNY':
+		profileLink = "[url={}{}]{}[/url]".format(URL_FN,profileName, profileName) 	 	#Kept separate in case IB devs a new link, fn!
+		
+	elif website == 'WEASYL' or website == 'FURRYNETWORK':
+#				regularLink = '[{}]({})'.format(description,link)
+		profileLink = "[{}{}]({})".format(URL_FN, profileName, profileName)		
+	else:
+		print("fnProfileLink ----- No valid website input.")
 	
 	return profileLink
 
@@ -218,7 +283,7 @@ def genProfileLink(inText, website='FURAFFINITY'):
 		elif linkVariant == 'genboth':
 			profileLink = ':icon{}:'.format(profileName)
 		else:
-			print("faProfileLink ----- No valid linkVariant input | ({}).".format(linkVariant))
+			print("genProfileLink() ----- No valid linkVariant input | ({}).".format(linkVariant))
 	
 	elif website == 'INKBUNNY':
 		if linkVariant == 'gen':
@@ -228,7 +293,7 @@ def genProfileLink(inText, website='FURAFFINITY'):
 		elif linkVariant == 'genboth':
 			profileLink = '@{}'.format(profileName)
 		else:
-			print("faProfileLink ----- No valid linkVariant input | ({}).".format(linkVariant))
+			print("genProfileLink() ----- No valid linkVariant input | ({}).".format(linkVariant))
 
 	elif website == 'WEASYL':
 		if linkVariant == 'gen':
@@ -238,10 +303,20 @@ def genProfileLink(inText, website='FURAFFINITY'):
 		elif linkVariant == 'genboth':
 			profileLink = '<!~{}>'.format(profileName)
 		else:
-			print("faProfileLink ----- No valid linkVariant input | ({}).".format(linkVariant))
+			print("genProfileLink() ----- No valid linkVariant input | ({}).".format(linkVariant))
+			
+	elif website == 'FURRYNETWORK':
+		if linkVariant == 'gen':
+			profileLink = '<~{}>'.format(profileName)
+		elif linkVariant == 'genicon':
+			profileLink = '<!{}>'.format(profileName)
+		elif linkVariant == 'genboth':
+			profileLink = '<!~{}>'.format(profileName)
+		else:
+			print("genProfileLink() ----- No valid linkVariant input | ({}).".format(linkVariant))
 			
 	else:
-		print("genProfileLink ----- No valid website input.")
+		print("genProfileLink ({}) ----- No valid website input.".format(website))
 	
 	return profileLink
 
@@ -253,16 +328,17 @@ Return Value: Formatted link
 """
 def generateLink(inText, website=SITE_NAMES[0]):
 	
-	refCombo = inText.split('!')[1] 
-	refCombo = refCombo.split('|')
+	refCombo = inText.split('!')[1] 				#Get Desc|Link
+	refCombo = refCombo.split('|') 				#Separate Desc|Link
 	description = refCombo[0]
 	link = refCombo[1]
 	
 	regularLink = 'UNDETERMINED REFERENCE LINK'
 	
-	if website == 'FURAFFINITY' or website == 'INKBUNNY':
+	#Build a link based on BBCode or Markdown
+	if website in SITES_BBC:
 		regularLink = '[url={}]{}[/url]'.format(link, description)
-	elif website == 'WEASYL':
+	elif website in SITES_MD:
 		regularLink = '[{}]({})'.format(description,link)
 	
 	return regularLink
@@ -298,9 +374,9 @@ def siteReferenceLink(inText, website=SITE_NAMES[0]):
 		
 	if link == '':
 		return link
-	if website == 'FURAFFINITY' or website == 'INKBUNNY':
+	if website in SITES_BBC:
 		refLink = '[url={}]{}[/url]'.format(link, charName)
-	elif website == 'WEASYL':
+	elif website in SITES_MD:
 		refLink = '[{}]({})'.format(charName,link)
 	
 	
@@ -447,6 +523,13 @@ def fileTextReplacement(fileIn, sitename=SITE_NAMES[0]):
 		for word in words:
 			#Iterate through the FA Profile formats
 			if '!' in word:
+				
+				#Check for if the ! is in the last position. It is not a valid expression.
+				if word.index('!') == len(word) -1:
+					newText += '{} '.format(word)
+					continue
+					
+				
 				exprFound = False
 				
 				if exprFound == False:
@@ -672,10 +755,12 @@ def main():
 '''
 INPUT EXAMPLE
 '''
-inputExample = """output!Introduction Hello there! genboth!Flamecoil here. Use this program to easily draft texts between FA, IB, and Weasyl! Instructions
-are in the README. Replace all this text here and run the python script again to get you going!"""
+#quickStart = open(QUICK_GUIDE_FILE, 'r')
+#qsContent = quickStart.read()
+inputExample = """output!Introduction Hello there! genboth!Flamecoil here. Use this program to easily draft texts between FA, IB, and Weasyl! 
+Instructions are in the README. Replace all this text here and run the python script again to get you going! \n\n"""
+#quickStart.close()
 
 
 
 main()
-
