@@ -47,7 +47,11 @@ URL_W  	= "https://www.weasyl.com/~" 			#www.weasyl.com/~flamecoil
 URL_FN 	= "https://furrynetwork.com/" 			#furrynetwork.com/flamecoil/
 URL_SF 	= ".sofurry.com/" 						#flamecoil.sofurry.com
 
-
+SELECTION_REGEX = '(|icon|both|ref)!'
+FA_REGEX 	= 'fa'+SELECTION_REGEX
+W_REGEX 	= 'w'+SELECTION_REGEX
+IB_REGEX 	= 'ib'+SELECTION_REGEX
+SF_REGEX 	= 'sf'+SELECTION_REGEX
 #EXPRESSION TYPES
 FA_TEXT_PROFILE = 'fa!'
 FA_ICON_PROFILE = 'faicon!'
