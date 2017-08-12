@@ -650,7 +650,10 @@ def readReferencesFile(inFilename):
 	wRef 		= W_REF_LINK.strip('!')
 	ibRef 		= IB_REF_LINK.strip('!')	
 	
-	inFile = open(inFilename, 'r')
+	if os.path.isfile(inFilename):
+		inFile = open(inFilename, 'r')
+	else:
+		return
 	curName = None
 	
 	for line in inFile:
