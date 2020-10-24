@@ -699,7 +699,7 @@ def writeReferencesFile(inDict=charReference):
 	
 	outFile = open(REFS_FILE, 'w')
 	
-	for entry in inDict:
+	for entry in sorted(inDict.keys()):
 		curRefList = charReference[entry]
 		outFile.write('{}{}\n'.format(NAME_REF, entry))
 		outFile.write(('{}{}\n'.format(FA_REF_LINK, curRefList[FA_INDEX])))
