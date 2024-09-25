@@ -328,7 +328,9 @@ Return Value: Formatted link
 """
 def generateLink(inText, website=SITE_NAMES[0]):
 	
-	refCombo = inText.split('!',1)[1] 				#Get Desc|Link
+	listText = inText.split('link!',1)
+	preCombo = listText[0]
+	refCombo = listText[1] 				#Get Desc|Link
 	refCombo = refCombo.split('|') 				#Separate Desc|Link
 	if (len(refCombo) != 2):
 		regularLink = inText.split('!')[0]
@@ -344,7 +346,8 @@ def generateLink(inText, website=SITE_NAMES[0]):
 	elif website in SITES_MD:
 		regularLink = '[{}]({})'.format(description,link)
 	
-	return regularLink
+	finishedText = preCombo + regularLink
+	return finishedText
 	
 
 """
