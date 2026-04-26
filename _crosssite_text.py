@@ -329,6 +329,7 @@ Return Value: Formatted link
 """
 def generateLink(inText, website=SITE_NAMES[0]):
 	
+	#TODO: Cannot do gaps in the words until Regex is implemented
 	listText = inText.split('link!',1)
 	preCombo = listText[0]
 	refCombo = listText[1] 				#Get Desc|Link
