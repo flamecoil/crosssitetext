@@ -660,7 +660,7 @@ def readReferencesFile(inFilename):
 	ibRef 		= IB_REF_LINK.strip('!')	
 	
 	if os.path.isfile(inFilename):
-		inFile = open(inFilename, 'r')
+		inFile = open(inFilename, 'r', encoding='utf-8')
 	else:
 		return
 	curName = None
@@ -702,7 +702,7 @@ def readReferencesFile(inFilename):
 
 def writeReferencesFile(inDict=charReference):
 	
-	outFile = open(REFS_FILE, 'w')
+	outFile = open(REFS_FILE, 'w', encoding='utf-8')
 	
 	for entry in sorted(inDict.keys()):
 		curRefList = charReference[entry]
@@ -724,20 +724,20 @@ def main():
 	
 	readReferencesFile(REFS_FILE)
 	if os.path.isfile(DEFAULT_FILENAMEIN):
-		inFile = open(DEFAULT_FILENAMEIN, 'r')
+		inFile = open(DEFAULT_FILENAMEIN, 'r',encoding='utf-8')
 	else:
-		inFile = open(DEFAULT_FILENAMEIN, 'w')
+		inFile = open(DEFAULT_FILENAMEIN, 'w',encoding='utf-8')
 		inFile.write(inputExample)
 		inFile.close()
-		inFile = open(DEFAULT_FILENAMEIN, 'r')
+		inFile = open(DEFAULT_FILENAMEIN, 'r',encoding='utf-8')
 	
 #	allSiteTexts('genboth!flamecoil')
 	texts, outputFilename = fileAllSiteTexts(inFile)
 	
 	if outputFilename == '':	
-		outFile = open(DEFAULT_FILENAMEOUT, 'w')
+		outFile = open(DEFAULT_FILENAMEOUT, 'w',encoding='utf-8')
 	else:
-		outFile = open(outputFilename, 'w')
+		outFile = open(outputFilename, 'w',encoding='utf-8')
 		print("OUTPUT FILE: {}".format(outputFilename))
 
 	for text in texts:
